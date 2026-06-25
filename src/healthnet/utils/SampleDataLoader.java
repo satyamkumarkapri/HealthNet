@@ -35,18 +35,20 @@ public class SampleDataLoader {
     }
 
     private static int loadDoctors(DoctorService ds) {
-        ds.addDoctor(new Doctor(201, "Dr. Alice Morgan", "Cardiology"));
-        ds.addDoctor(new Doctor(202, "Dr. Bob Vance", "Neurology"));
-        ds.addDoctor(new Doctor(203, "Dr. Charlie Kelly", "Pediatrics"));
-        ds.addDoctor(new Doctor(204, "Dr. Dana Scully", "General Medicine"));
-        ds.addDoctor(new Doctor(205, "Dr. Evan Wright", "Orthopedics"));
-        return 5;
+        ds.loadFromCSV();
+        if (ds.getAllDoctors().isEmpty()) {
+            ds.addDoctor(new Doctor(201, "Dr. Alice Smith", "Cardiology"));
+            ds.addDoctor(new Doctor(202, "Dr. Bob Jones", "Neurology"));
+            ds.addDoctor(new Doctor(203, "Dr. Carol White", "Pediatrics"));
+            ds.addDoctor(new Doctor(204, "Dr. David Brown", "Orthopedics"));
+            ds.addDoctor(new Doctor(205, "Dr. Eve Davis", "General Medicine"));
+        }
+        return ds.getAllDoctors().size();
     }
 
     private static int loadPatients(PatientService ps) {
-        // No pre-loaded patients per user request. 
-        // Only manually added patients will be in the system.
-        return 0;
+        ps.loadFromCSV();
+        return ps.getAllPatients().size();
     }
 
     private static int loadAppointments(AppointmentService as, DoctorService ds) {

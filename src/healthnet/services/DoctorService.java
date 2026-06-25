@@ -1,6 +1,7 @@
 package healthnet.services;
 
 import healthnet.model.Doctor;
+import healthnet.utils.CSVStorageManager;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -34,9 +35,18 @@ public class DoctorService {
         return instance;
     }
 
+    public void loadFromCSV() {
+        List<Doctor> list = CSVStorageManager.loadDoctors();
+        for (Doctor d : list) {
+            doctorMap.put(d.getDoctorId(), d);
+            availabilityPQ.add(d);
+        }
+    }
+
     public void addDoctor(Doctor d) {
         doctorMap.put(d.getDoctorId(), d);
         availabilityPQ.add(d);
+        CSVStorageManager.saveDoctors(getAllDoctors());
     }
 
     public void updateDoctor(Doctor d) {
@@ -46,12 +56,14 @@ public class DoctorService {
         }
         doctorMap.put(d.getDoctorId(), d);
         availabilityPQ.add(d);
+        CSVStorageManager.saveDoctors(getAllDoctors());
     }
 
     public void deleteDoctor(int id) {
         Doctor d = doctorMap.remove(id);
         if (d != null) {
             availabilityPQ.remove(d);
+            CSVStorageManager.saveDoctors(getAllDoctors());
         }
     }
 

@@ -3,6 +3,8 @@ package healthnet.services;
 import healthnet.model.Patient;
 import healthnet.trees.AVLTree;
 import healthnet.trees.BST;
+import healthnet.utils.CSVStorageManager;
+
 import java.util.List;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -27,17 +29,28 @@ public class PatientService {
         return instance;
     }
 
+    public void loadFromCSV() {
+        List<Patient> list = CSVStorageManager.loadPatients();
+        for (Patient p : list) {
+            bst.insert(p);
+            avl.insert(p);
+            patientMap.put(p.getPatientId(), p);
+        }
+    }
+
     public void addPatient(int id, String name, int age, String gender, String disease, LocalDate admissionDate, int severityScore) {
         Patient p = new Patient(id, name, age, gender, disease, admissionDate, severityScore);
         bst.insert(p);
         avl.insert(p);
         patientMap.put(id, p);
+        CSVStorageManager.savePatients(getAllPatients());
     }
     
     public void addPatient(Patient p) {
         bst.insert(p);
         avl.insert(p);
         patientMap.put(p.getPatientId(), p);
+        CSVStorageManager.savePatients(getAllPatients());
     }
 
     public Patient searchPatient(int id) {
@@ -73,6 +86,7 @@ public class PatientService {
             bst.delete(p);
             avl.delete(p);
             patientMap.remove(id);
+            CSVStorageManager.savePatients(getAllPatients());
         }
     }
     

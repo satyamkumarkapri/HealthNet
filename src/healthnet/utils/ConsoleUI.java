@@ -1549,7 +1549,7 @@ public class ConsoleUI implements healthnet.patterns.observer.Observer {
     @Override
     public void update(String message) {
         System.out.println();
-        ConsoleColors.printError("🔔 OBSERVER ALERT: " + message);
+        ConsoleColors.printWarning("🔔 OBSERVER ALERT: " + message);
         System.out.println();
     }
 }
